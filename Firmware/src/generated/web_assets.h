@@ -10,36 +10,188 @@ const char WEB_ASSET_INDEX_CONTENT[] PROGMEM = R"WEB_ASSET(<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>校园洗衣券铺</title>
+<title>樱花洗衣券铺</title>
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div class="orn"><i>泡</i><i>券</i><i>◯</i><i>洗</i></div>
+<div class="grain"></div>
+<div class="sakura" aria-hidden="true"><i>✿</i><i>券</i><i>泡</i><i>◌</i><i>洗</i></div>
 <main class="wrap">
-<header class="top"><div class="brand"><div class="mark">🫧</div><div><h1>校园洗衣券铺</h1><p>CQUPT LAUNDRY TICKET</p></div></div><div class="status"><i></i>当前在线</div></header>
-<section class="hero"><div class="tape">复古小店 · 校园洗衣遥控</div><h2>今天也要把衣服<b>洗得干净</b></h2><p>连接设备热点，选择对应洗衣券，ESP8266 会把 HEX 指令发送到串口。界面保留复古小店的氛围，操作保持直接清晰。</p><div class="stamp">洗衣券<br>已就绪</div><div class="washer"></div><div class="info"><div class="mini"><b>设备热点</b><span>好孩子不玩米</span></div><div class="mini"><b>连接密码</b><span>12345678</span></div></div></section>
-<section class="panel"><div class="title"><h3>洗衣模式</h3><small id="last">待选择</small></div><div class="rail" id="activity"><i></i></div><div class="grid">
-<button class="cmd" data-price="¥1" onclick="send('1','1元脱水',this,event)"><em>ticket 01</em><strong>1元脱水</strong><span>短时脱水，适合单独甩干衣物</span></button>
-<button class="cmd" data-price="¥3" onclick="send('3','3元快速洗',this,event)"><em>ticket 03</em><strong>3元快速洗</strong><span>快速清洗，适合少量衣物</span></button>
-<button class="cmd pick" data-price="¥4" onclick="send('4','4元标准洗',this,event)"><em>店长推荐</em><strong>4元标准洗</strong><span>日常推荐，适合标准洗涤</span></button>
-<button class="cmd" data-price="4+" onclick="send('4p','4元加强版',this,event)"><em>extra</em><strong>4元加强版</strong><span>加强洗涤，适合更完整的流程</span></button>
-<button class="cmd wide" data-price="¥6" onclick="send('6','6元加强洗',this,event)"><em>大件洗衣券</em><strong>6元加强洗</strong><span>连续发送两段指令，适合大件或较多衣物</span></button>
-</div></section>
-<section class="panel"><div class="title"><h3>自定义指令</h3><small id="hexState">HEX</small></div><div class="custom"><div class="note"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>自定义 HEX 指令</span></div><textarea id="custom" spellcheck="false" placeholder="AA 06 01 98 04 00 75 03" oninput="checkHex()"></textarea></div><div class="meta"><span>字节数：<b id="bytes">0</b></span><span id="valid">未输入</span></div><button class="send" onclick="sendCustom(event)">发送自定义指令</button><p class="hint">仅输入十六进制字节，可带空格。请只在授权设备上学习测试。</p></div></section>
-</main><div id="bits" class="confetti"></div><div id="toast" class="toast"></div>
+<header class="shop-head">
+  <div class="lantern"><span>洗</span></div>
+  <div class="brand">
+    <p class="eyebrow">昭和小店 · 校园洗衣遥控</p>
+    <h1>樱花洗衣券铺</h1>
+    <p class="sub">把洗衣模式做成一张张小票，轻轻一点就出票。</p>
+  </div>
+  <div class="open"><i></i>今日营业中</div>
+</header>
+
+<section class="hero ticket">
+  <div class="tape">CQUPT LAUNDRY TICKET</div>
+  <div class="hero-copy">
+    <span class="seal">入店<br>欢迎</span>
+    <h2>今天也要把衣服<br><b>洗得松松软软</b></h2>
+    <p>连接设备热点后，选择一张洗衣券。ESP8266 会把对应 HEX 指令发送到串口，界面保持日系小店感，操作仍然直接。</p>
+  </div>
+  <div class="washer" aria-hidden="true"><b></b></div>
+  <div class="shop-meta">
+    <div><span>小店热点</span><strong>好孩子不玩米</strong></div>
+    <div><span>入店暗号</span><strong>12345678</strong></div>
+  </div>
+</section>
+
+<section class="shelf panel">
+  <div class="section-title">
+    <div><span>01</span><h3>洗衣券货架</h3></div>
+    <small id="last">欢迎光临</small>
+  </div>
+  <div class="ticket-rail" id="activity"><i></i></div>
+  <div class="ticket-grid">
+    <button class="cmd blush" data-price="¥1" onclick="send('1','1元脱水',this,event)"><em>轻量小票</em><strong>1元脱水</strong><span>单独甩干，像小店快速取票。</span></button>
+    <button class="cmd mint" data-price="¥3" onclick="send('3','3元快速洗',this,event)"><em>快速券</em><strong>3元快速洗</strong><span>少量衣物，短平快完成。</span></button>
+    <button class="cmd pick" data-price="¥4" onclick="send('4','4元标准洗',this,event)"><em>店长推荐</em><strong>4元标准洗</strong><span>日常最稳妥的一张洗衣券。</span></button>
+    <button class="cmd sky" data-price="4+" onclick="send('4p','4元加强版',this,event)"><em>加量券</em><strong>4元加强版</strong><span>流程更完整，适合稍多衣物。</span></button>
+    <button class="cmd wide cream" data-price="¥6" onclick="send('6','6元加强洗',this,event)"><em>大件洗衣券</em><strong>6元加强洗</strong><span>连续发送两段指令，适合大件或更重的洗涤需求。</span></button>
+  </div>
+</section>
+
+<section class="drawer panel">
+  <div class="section-title">
+    <div><span>02</span><h3>隐藏抽屉</h3></div>
+    <small id="hexState">HEX</small>
+  </div>
+  <div class="terminal-card">
+    <div class="bar"><i></i><i></i><i></i><b>自定义 HEX 小票</b></div>
+    <textarea id="custom" spellcheck="false" placeholder="AA 06 01 98 04 00 75 03" oninput="checkHex()"></textarea>
+  </div>
+  <div class="meta"><span>字节数：<b id="bytes">0</b></span><span id="valid">未输入</span></div>
+  <button class="send" onclick="sendCustom(event)">从隐藏抽屉出票</button>
+  <p class="hint">仅输入十六进制字节，可带空格。请只在授权设备上学习测试。</p>
+</section>
+</main>
+<div id="bits" class="confetti"></div>
+<div id="toast" class="toast"></div>
 <script src="/app.js"></script>
 </body>
 </html>
 )WEB_ASSET";
 
-const char WEB_ASSET_STYLES_CONTENT[] PROGMEM = R"WEB_ASSET(:root{--cream:#fff6e2;--paper:#fffdf5;--ink:#263238;--muted:#75685d;--red:#e85d5d;--blue:#3777c8;--navy:#23395d;--mint:#8fd3c7;--yellow:#ffd66b;--pink:#f8b8c6;--line:#263238;--shadow:#263238}*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{min-height:100vh;overflow-x:hidden;color:var(--ink);font-family:"Trebuchet MS","PingFang SC","Microsoft YaHei",system-ui,sans-serif;padding:12px;background:radial-gradient(circle at 12% 9%,rgba(248,184,198,.38),transparent 14rem),radial-gradient(circle at 88% 2%,rgba(143,211,199,.36),transparent 15rem),linear-gradient(90deg,rgba(255,255,255,.22) 1px,transparent 1px),linear-gradient(#fff6e2,#f6e4c2);background-size:auto,auto,22px 22px,auto}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(rgba(38,50,56,.16) 1px,transparent 1px);background-size:16px 16px;opacity:.28}.orn{position:fixed;inset:0;pointer-events:none;overflow:hidden}.orn i{position:absolute;font-style:normal;font-size:20px;opacity:.2;animation:drift 7s ease-in-out infinite}.orn i:nth-child(1){left:6%;top:12%}.orn i:nth-child(2){right:8%;top:20%;animation-delay:-2s}.orn i:nth-child(3){left:10%;bottom:18%;animation-delay:-4s}.orn i:nth-child(4){right:13%;bottom:10%;animation-delay:-1s}.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;margin:4px 0 13px}.brand{display:flex;gap:10px;align-items:center}.mark{width:48px;height:48px;border:2px solid var(--line);border-radius:17px;background:linear-gradient(135deg,var(--red),#ff8b70);box-shadow:4px 4px 0 var(--shadow);display:grid;place-items:center;color:#fff;font-size:23px;transform:rotate(-5deg);position:relative}.mark:after{content:"洗";position:absolute;right:-8px;bottom:-7px;width:23px;height:23px;border:2px solid var(--line);border-radius:50%;background:var(--yellow);color:var(--ink);display:grid;place-items:center;font-size:12px;font-weight:950}.brand h1{font-size:19px;letter-spacing:.02em;font-weight:950}.brand p{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:.14em}.status{border:2px solid var(--line);border-radius:999px;background:#fff;box-shadow:3px 3px 0 var(--shadow);padding:7px 10px;font-size:11px;font-weight:950}.status i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ebd70;margin-right:6px;animation:pulse 1.6s infinite}.hero{position:relative;overflow:hidden;border:2px solid var(--line);border-radius:25px;background:linear-gradient(180deg,#fffdf5,#ffecc7);box-shadow:7px 7px 0 var(--shadow);padding:17px 17px 15px;margin-bottom:14px}.tape{display:inline-block;background:rgba(248,184,198,.85);border:2px solid var(--line);box-shadow:3px 3px 0 var(--shadow);border-radius:3px;transform:rotate(-2deg);padding:6px 12px;font-size:11px;font-weight:950;letter-spacing:.16em;margin-bottom:13px}.hero h2{font-size:34px;line-height:1;letter-spacing:-1.5px;font-weight:950;max-width:320px}.hero h2 b{color:var(--red);text-shadow:2px 2px 0 #ffd8a8}.hero p{font-size:13px;line-height:1.75;color:var(--muted);margin-top:11px;max-width:340px}.stamp{position:absolute;right:-12px;top:24px;width:94px;height:94px;border:3px solid var(--red);border-radius:50%;color:var(--red);display:grid;place-items:center;text-align:center;font-weight:950;font-size:12px;line-height:1.25;transform:rotate(15deg);opacity:.82}.washer{position:absolute;right:18px;bottom:19px;width:82px;height:96px;border:2px solid var(--line);border-radius:15px;background:#fff;box-shadow:5px 5px 0 var(--shadow);transform:rotate(3deg)}.washer:before{content:"";position:absolute;left:14px;top:30px;width:50px;height:50px;border:2px solid var(--line);border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff 0 8px,transparent 9px),conic-gradient(var(--mint),#fff,var(--blue),var(--mint));animation:spin 3s linear infinite}.washer:after{content:"";position:absolute;left:11px;top:11px;width:9px;height:9px;border:2px solid var(--line);border-radius:50%;background:var(--red);box-shadow:17px 0 0 var(--yellow),34px 0 0 var(--mint)}.info{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px;padding-right:94px}.mini{background:#fff;border:2px solid var(--line);border-radius:13px;box-shadow:3px 3px 0 var(--shadow);padding:9px;position:relative}.mini:before{content:"";position:absolute;left:8px;right:8px;top:-5px;height:9px;background:rgba(143,211,199,.55);transform:rotate(-1deg)}.mini b{font-size:12px}.mini span{display:block;color:var(--muted);font-size:10px;margin-top:3px}.panel{border:2px solid var(--line);border-radius:23px;background:rgba(255,253,245,.95);box-shadow:6px 6px 0 var(--shadow);padding:14px;margin-bottom:14px}.title{display:flex;align-items:end;justify-content:space-between;margin-bottom:11px}.title h3{font-size:18px;font-weight:950}.title small{font-size:10px;background:var(--navy);color:#fff;border-radius:999px;padding:5px 9px;font-weight:950}.rail{height:14px;border:2px solid var(--line);border-radius:999px;background:repeating-linear-gradient(90deg,#fff 0 14px,#ffe1a1 14px 28px);overflow:hidden;margin-bottom:12px}.rail i{display:block;width:35%;height:100%;background:linear-gradient(90deg,var(--red),var(--yellow));transform:translateX(-120%)}.rail.run i{animation:ticket 1s ease-in-out}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cmd{position:relative;min-height:112px;padding:12px 12px 30px;border:2px solid var(--line);border-radius:18px;background:#fff;box-shadow:4px 4px 0 var(--shadow);cursor:pointer;text-align:left;color:var(--ink);transition:.12s;overflow:hidden}.cmd:nth-child(odd){transform:rotate(-1deg)}.cmd:nth-child(even){transform:rotate(1deg)}.cmd.wide{grid-column:1/3;min-height:88px;background:#eafff8}.cmd.pick{background:#fff1bd}.cmd:before{content:attr(data-price);position:absolute;right:9px;top:9px;width:38px;height:38px;border:2px solid var(--line);border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:950;box-shadow:2px 2px 0 var(--shadow)}.cmd:after{content:"出票";position:absolute;left:11px;bottom:9px;background:var(--yellow);border:2px solid var(--line);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:950}.cmd em{display:inline-block;font-style:normal;background:var(--mint);border:2px solid var(--line);border-radius:999px;padding:3px 7px;font-size:10px;font-weight:950;margin-bottom:10px}.cmd strong{display:block;font-size:18px;font-weight:950;line-height:1.05}.cmd span{display:block;margin-top:6px;max-width:135px;color:var(--muted);font-size:11px;line-height:1.45}.cmd:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow)}.cmd:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}.cmd.busy{pointer-events:none;opacity:.75}.cmd.busy:before{content:"↻";animation:spin .8s linear infinite}.cmd.ok{background:#e7ffe9}.custom{display:grid;gap:10px}.note{border:2px solid var(--line);border-radius:17px;background:#fff;box-shadow:4px 4px 0 var(--shadow);overflow:hidden}.bar{height:32px;display:flex;align-items:center;gap:6px;background:#ffdfe7;border-bottom:2px solid var(--line);padding:0 10px;font-size:10px;font-weight:950;letter-spacing:.1em}.dot{width:8px;height:8px;border:2px solid var(--line);border-radius:50%;background:var(--red)}.dot:nth-child(2){background:var(--yellow)}.dot:nth-child(3){background:var(--mint)}textarea{width:100%;min-height:88px;border:0;outline:none;resize:vertical;background:#fffdf5;color:var(--ink);padding:13px 14px;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}textarea.ok{background:#effff5}textarea.bad{background:#fff0f0;animation:shake .22s}.meta{display:flex;justify-content:space-between;border:2px solid var(--line);border-radius:14px;background:#fff;box-shadow:3px 3px 0 var(--shadow);padding:10px 12px;color:var(--muted);font-size:12px}.meta b{color:var(--ink)}.send{border:2px solid var(--line);border-radius:16px;background:var(--blue);color:#fff;font-size:15px;font-weight:950;padding:15px;box-shadow:4px 4px 0 var(--shadow);cursor:pointer}.send:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}.hint{font-size:11px;color:var(--muted);line-height:1.6}.toast{position:fixed;left:50%;bottom:22px;z-index:6;transform:translate(-50%,24px) rotate(-1deg);opacity:0;pointer-events:none;min-width:205px;max-width:calc(100vw - 32px);border:2px solid var(--line);border-radius:16px;background:#fff;box-shadow:5px 5px 0 var(--shadow);padding:12px 14px;text-align:center;font-size:14px;font-weight:950;transition:.22s}.toast.show{opacity:1;transform:translate(-50%,0) rotate(-1deg)}.toast.ok{background:#e7ffe9}.toast.err{background:#ffe1e1}.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}.confetti i{position:absolute;width:10px;height:14px;border:2px solid var(--line);background:var(--yellow);box-shadow:2px 2px 0 var(--shadow);animation:fall .8s ease-out forwards}@keyframes drift{50%{transform:translateY(-18px) rotate(8deg)}}@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(62,189,112,0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ticket{0%{transform:translateX(-120%)}70%{transform:translateX(85%)}100%{transform:translateX(230%)}}@keyframes fall{to{transform:translate(var(--dx),-80px) rotate(80deg);opacity:0}}@keyframes shake{50%{transform:translateX(4px)}}@media(max-width:420px){body{padding:10px}.hero h2{font-size:30px}.washer{width:70px;height:82px;right:10px}.washer:before{left:12px;top:27px;width:43px;height:43px}.info{grid-template-columns:1fr;padding-right:78px}.cmd{min-height:106px}.cmd strong{font-size:17px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+const char WEB_ASSET_STYLES_CONTENT[] PROGMEM = R"WEB_ASSET(:root{--paper:#fff8e9;--paper2:#fffdf6;--ink:#2d2a26;--muted:#756b61;--line:#2d2a26;--sakura:#f5a9bd;--sakura2:#ffdbe5;--red:#d95d59;--blue:#5b8cc9;--mint:#94d4c4;--tea:#b88955;--cream:#ffe8a9;--shadow:#2d2a26}*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{min-height:100vh;overflow-x:hidden;color:var(--ink);font-family:"Trebuchet MS","PingFang SC","Microsoft YaHei",system-ui,sans-serif;padding:12px;background:radial-gradient(circle at 13% 8%,rgba(245,169,189,.42),transparent 13rem),radial-gradient(circle at 88% 4%,rgba(148,212,196,.38),transparent 14rem),linear-gradient(90deg,rgba(45,42,38,.07) 1px,transparent 1px),linear-gradient(var(--paper),#f3dfbd);background-size:auto,auto,24px 24px,auto}.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;background:radial-gradient(rgba(45,42,38,.18) 1px,transparent 1px);background-size:17px 17px}.sakura{position:fixed;inset:0;pointer-events:none;overflow:hidden}.sakura i{position:absolute;font-style:normal;font-size:19px;color:var(--red);opacity:.2;animation:float 7s ease-in-out infinite}.sakura i:nth-child(1){left:7%;top:10%}.sakura i:nth-child(2){right:8%;top:17%;animation-delay:-2s}.sakura i:nth-child(3){left:9%;bottom:17%;animation-delay:-4s}.sakura i:nth-child(4){right:16%;bottom:9%;animation-delay:-1s}.sakura i:nth-child(5){left:50%;top:5%;animation-delay:-3s}.wrap{position:relative;z-index:1;max-width:500px;margin:0 auto}.shop-head{display:grid;grid-template-columns:55px 1fr auto;gap:10px;align-items:center;margin:3px 0 14px}.lantern{width:51px;height:58px;border:2px solid var(--line);border-radius:24px 24px 20px 20px;background:linear-gradient(180deg,#fffbf4,var(--sakura2));box-shadow:4px 4px 0 var(--shadow);display:grid;place-items:center;position:relative;transform:rotate(-4deg)}.lantern:before,.lantern:after{content:"";position:absolute;left:10px;right:10px;height:2px;background:var(--line)}.lantern:before{top:10px}.lantern:after{bottom:10px}.lantern span{font-weight:950;font-size:22px;color:var(--red)}.brand .eyebrow{font-size:10px;color:var(--tea);font-weight:950;letter-spacing:.16em}.brand h1{font-size:24px;font-weight:950;letter-spacing:.02em;line-height:1.15}.brand .sub{font-size:11px;color:var(--muted);line-height:1.45;margin-top:2px}.open{border:2px solid var(--line);border-radius:999px;background:#fff;box-shadow:3px 3px 0 var(--shadow);padding:8px 10px;font-size:11px;font-weight:950;white-space:nowrap}.open i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#38b66b;margin-right:5px;animation:pulse 1.6s infinite}.ticket{position:relative;overflow:hidden;border:2px solid var(--line);border-radius:26px;background:linear-gradient(180deg,#fffdf6,#ffe7bc);box-shadow:7px 7px 0 var(--shadow);padding:18px 18px 15px;margin-bottom:14px}.ticket:before,.ticket:after{content:"";position:absolute;top:52%;width:24px;height:24px;border:2px solid var(--line);border-radius:50%;background:var(--paper)}.ticket:before{left:-14px}.ticket:after{right:-14px}.tape{display:inline-block;border:2px solid var(--line);border-radius:4px;background:rgba(245,169,189,.88);box-shadow:3px 3px 0 var(--shadow);padding:6px 12px;font-size:10px;font-weight:950;letter-spacing:.14em;transform:rotate(-2deg);margin-bottom:14px}.hero-copy{position:relative;z-index:1;max-width:345px}.seal{position:absolute;right:-26px;top:-3px;width:62px;height:62px;border:3px solid var(--red);border-radius:50%;color:var(--red);display:grid;place-items:center;text-align:center;font-size:12px;line-height:1.2;font-weight:950;transform:rotate(14deg);opacity:.86}.hero h2{font-size:31px;line-height:1.06;letter-spacing:-1px;font-weight:950}.hero h2 b{color:var(--red);text-shadow:2px 2px 0 #ffd8a8}.hero p{font-size:13px;line-height:1.75;color:var(--muted);margin-top:11px}.washer{position:absolute;right:17px;bottom:22px;width:82px;height:95px;border:2px solid var(--line);border-radius:15px;background:#fff;box-shadow:5px 5px 0 var(--shadow);transform:rotate(3deg)}.washer:before{content:"";position:absolute;left:13px;top:30px;width:52px;height:52px;border:2px solid var(--line);border-radius:50%;background:radial-gradient(circle at 36% 34%,#fff 0 8px,transparent 9px),conic-gradient(var(--sakura),#fff,var(--blue),var(--mint),var(--sakura));animation:spin 3.2s linear infinite}.washer:after{content:"";position:absolute;left:11px;top:11px;width:9px;height:9px;border:2px solid var(--line);border-radius:50%;background:var(--red);box-shadow:17px 0 0 var(--cream),34px 0 0 var(--mint)}.shop-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px;padding-right:92px}.shop-meta div{position:relative;border:2px solid var(--line);border-radius:14px;background:#fff;box-shadow:3px 3px 0 var(--shadow);padding:10px}.shop-meta div:before{content:"";position:absolute;left:9px;right:9px;top:-5px;height:9px;background:rgba(148,212,196,.55);transform:rotate(-1deg)}.shop-meta span{display:block;font-size:10px;color:var(--muted);font-weight:900}.shop-meta strong{display:block;font-size:12px;margin-top:4px}.panel{border:2px solid var(--line);border-radius:23px;background:rgba(255,253,246,.96);box-shadow:6px 6px 0 var(--shadow);padding:14px;margin-bottom:14px}.section-title{display:flex;align-items:end;justify-content:space-between;margin-bottom:11px}.section-title div{display:flex;align-items:center;gap:8px}.section-title span{width:28px;height:28px;border:2px solid var(--line);border-radius:50%;background:var(--sakura2);display:grid;place-items:center;font-size:12px;font-weight:950}.section-title h3{font-size:19px;font-weight:950}.section-title small{font-size:10px;background:var(--blue);color:#fff;border:2px solid var(--line);border-radius:999px;padding:5px 9px;font-weight:950;box-shadow:2px 2px 0 var(--shadow)}.ticket-rail{height:15px;border:2px solid var(--line);border-radius:999px;background:repeating-linear-gradient(90deg,#fff 0 13px,#ffe0a0 13px 26px);overflow:hidden;margin-bottom:12px}.ticket-rail i{display:block;width:35%;height:100%;background:linear-gradient(90deg,var(--sakura),var(--cream));transform:translateX(-120%)}.ticket-rail.run i{animation:ticket 1s ease-in-out}.ticket-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cmd{position:relative;min-height:116px;padding:12px 12px 32px;border:2px solid var(--line);border-radius:18px;background:#fff;box-shadow:4px 4px 0 var(--shadow);cursor:pointer;text-align:left;color:var(--ink);transition:.12s;overflow:hidden}.cmd:nth-child(odd){transform:rotate(-1deg)}.cmd:nth-child(even){transform:rotate(1deg)}.cmd:before{content:attr(data-price);position:absolute;right:9px;top:9px;width:39px;height:39px;border:2px solid var(--line);border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:950;box-shadow:2px 2px 0 var(--shadow)}.cmd:after{content:"出票";position:absolute;left:11px;bottom:9px;background:var(--cream);border:2px solid var(--line);border-radius:999px;padding:2px 9px;font-size:10px;font-weight:950}.cmd em{display:inline-block;font-style:normal;border:2px solid var(--line);border-radius:999px;background:#fff;padding:3px 7px;font-size:10px;font-weight:950;margin-bottom:10px}.cmd strong{display:block;font-size:18px;font-weight:950;line-height:1.06}.cmd span{display:block;max-width:136px;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.45}.cmd.blush{background:#fff1f5}.cmd.mint{background:#eafff8}.cmd.pick{background:#fff1bd}.cmd.sky{background:#ecf5ff}.cmd.cream{background:#fff8dc}.cmd.wide{grid-column:1/3;min-height:92px}.cmd:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow)}.cmd:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}.cmd.busy{pointer-events:none;opacity:.76}.cmd.busy:before{content:"↻";animation:spin .8s linear infinite}.cmd.ok{background:#e8ffe8}.terminal-card{border:2px solid var(--line);border-radius:17px;background:#fff;box-shadow:4px 4px 0 var(--shadow);overflow:hidden}.bar{height:33px;display:flex;align-items:center;gap:7px;background:#ffe0e9;border-bottom:2px solid var(--line);padding:0 10px}.bar i{width:8px;height:8px;border:2px solid var(--line);border-radius:50%;background:var(--red)}.bar i:nth-child(2){background:var(--cream)}.bar i:nth-child(3){background:var(--mint)}.bar b{font-size:10px;letter-spacing:.12em}textarea{width:100%;min-height:92px;border:0;outline:none;resize:vertical;background:#fffdf6;color:var(--ink);padding:13px 14px;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}textarea.ok{background:#effff5}textarea.bad{background:#fff0f0;animation:shake .22s}.meta{display:flex;justify-content:space-between;border:2px solid var(--line);border-radius:14px;background:#fff;box-shadow:3px 3px 0 var(--shadow);padding:10px 12px;color:var(--muted);font-size:12px;margin:10px 0}.meta b{color:var(--ink)}.send{width:100%;border:2px solid var(--line);border-radius:16px;background:var(--blue);color:#fff;font-size:15px;font-weight:950;padding:15px;box-shadow:4px 4px 0 var(--shadow);cursor:pointer}.send:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}.hint{font-size:11px;color:var(--muted);line-height:1.6;margin-top:9px}.toast{position:fixed;left:50%;bottom:22px;z-index:6;transform:translate(-50%,24px) rotate(-1deg);opacity:0;pointer-events:none;min-width:218px;max-width:calc(100vw - 32px);border:2px solid var(--line);border-radius:16px;background:#fff;box-shadow:5px 5px 0 var(--shadow);padding:12px 14px;text-align:center;font-size:14px;font-weight:950;transition:.22s}.toast.show{opacity:1;transform:translate(-50%,0) rotate(-1deg)}.toast.ok{background:#e8ffe8}.toast.err{background:#ffe1e1}.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}.confetti i{position:absolute;width:10px;height:14px;border:2px solid var(--line);background:var(--cream);box-shadow:2px 2px 0 var(--shadow);animation:fall .8s ease-out forwards}@keyframes float{50%{transform:translateY(-18px) rotate(8deg)}}@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(56,182,107,0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ticket{0%{transform:translateX(-120%)}70%{transform:translateX(86%)}100%{transform:translateX(230%)}}@keyframes fall{to{transform:translate(var(--dx),-82px) rotate(80deg);opacity:0}}@keyframes shake{50%{transform:translateX(4px)}}@media(max-width:430px){body{padding:10px}.shop-head{grid-template-columns:48px 1fr}.open{grid-column:2;font-size:10px;justify-self:start}.brand h1{font-size:22px}.hero h2{font-size:28px}.washer{width:70px;height:82px;right:10px;bottom:18px}.washer:before{left:12px;top:27px;width:43px;height:43px}.shop-meta{grid-template-columns:1fr;padding-right:76px}.cmd{min-height:108px}.cmd strong{font-size:17px}.seal{right:-8px;top:-28px;width:54px;height:54px;font-size:11px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 )WEB_ASSET";
 
-const char WEB_ASSET_APP_CONTENT[] PROGMEM = R"WEB_ASSET(let timer;const $=id=>document.getElementById(id);function show(msg,err){const e=$('toast');clearTimeout(timer);e.textContent=msg;e.className='toast show '+(err?'err':'ok');timer=setTimeout(()=>e.className='toast',2200)}
-function runBar(){const a=$('activity');a.className='rail';void a.offsetWidth;a.className='rail run'}function confetti(ev){const box=$('bits'),x=ev?ev.clientX:innerWidth/2,y=ev?ev.clientY:innerHeight*.72;for(let i=0;i<10;i++){const b=document.createElement('i');b.style.left=x+'px';b.style.top=y+'px';b.style.background=i%3?'#ffd66b':i%2?'#8fd3c7':'#f8b8c6';b.style.setProperty('--dx',(Math.random()*130-65)+'px');box.appendChild(b);setTimeout(()=>b.remove(),850)}}
-async function send(t,n,el,ev){runBar();if(el)el.classList.add('busy');$('last').textContent='指令发送中…';try{const r=await fetch('/'+t,{method:'POST'});if(!r.ok)throw 0;show('指令已发送：'+n);$('last').textContent='刚刚：'+n;if(el){el.classList.remove('busy');el.classList.add('ok');setTimeout(()=>el.classList.remove('ok'),700)}confetti(ev)}catch(e){if(el)el.classList.remove('busy');show('发送失败，看看热点连上没',1);$('last').textContent='发送失败'}}
-function checkHex(){const ta=$('custom'),d=ta.value.trim(),ok=/^([0-9a-fA-F]{2}\s*)+$/.test(d);ta.classList.remove('ok','bad');if(!d){$('bytes').textContent='0';$('valid').textContent='未输入';$('hexState').textContent='HEX';return false}const n=(d.match(/[0-9a-fA-F]{2}/g)||[]).length;$('bytes').textContent=n;$('valid').textContent=ok?'格式正确':'格式错误';$('hexState').textContent=ok?'可发送':'需检查';ta.classList.add(ok?'ok':'bad');return ok}
-async function sendCustom(ev){const d=$('custom').value.trim();if(!d){show('先写点 HEX 指令',1);return}if(!checkHex()){show('格式不对：请输入十六进制字节',1);return}runBar();$('last').textContent='自定义指令发送中…';try{const r=await fetch('/custom',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'d='+encodeURIComponent(d)});if(!r.ok)throw 0;show('自定义指令已发送');$('last').textContent='刚刚：自定义 HEX';confetti(ev)}catch(e){show('发送失败，看看热点连上没',1);$('last').textContent='发送失败'}}
+const char WEB_ASSET_APP_CONTENT[] PROGMEM = R"WEB_ASSET(let timer;
+const $ = (id) => document.getElementById(id);
+
+function show(message, isError) {
+  const toast = $('toast');
+  clearTimeout(timer);
+  toast.textContent = message;
+  toast.className = 'toast show ' + (isError ? 'err' : 'ok');
+  timer = setTimeout(() => {
+    toast.className = 'toast';
+  }, 2200);
+}
+
+function runBar() {
+  const activity = $('activity');
+  activity.className = 'ticket-rail';
+  void activity.offsetWidth;
+  activity.className = 'ticket-rail run';
+}
+
+function confetti(event) {
+  const box = $('bits');
+  const x = event ? event.clientX : innerWidth / 2;
+  const y = event ? event.clientY : innerHeight * 0.72;
+  const colors = ['#ffdbe5', '#ffe8a9', '#94d4c4', '#ffffff'];
+
+  for (let i = 0; i < 12; i++) {
+    const piece = document.createElement('i');
+    piece.style.left = x + 'px';
+    piece.style.top = y + 'px';
+    piece.style.background = colors[i % colors.length];
+    piece.style.setProperty('--dx', (Math.random() * 140 - 70) + 'px');
+    box.appendChild(piece);
+    setTimeout(() => piece.remove(), 850);
+  }
+}
+
+async function send(path, name, button, event) {
+  runBar();
+  if (button) button.classList.add('busy');
+  $('last').textContent = '洗衣券出票中…';
+
+  try {
+    const response = await fetch('/' + path, { method: 'POST' });
+    if (!response.ok) throw new Error('bad status');
+
+    show('已出票：' + name);
+    $('last').textContent = '刚刚：' + name;
+    if (button) {
+      button.classList.remove('busy');
+      button.classList.add('ok');
+      setTimeout(() => button.classList.remove('ok'), 700);
+    }
+    confetti(event);
+  } catch (error) {
+    if (button) button.classList.remove('busy');
+    show('出票失败，检查一下热点连接', true);
+    $('last').textContent = '出票失败';
+  }
+}
+
+function checkHex() {
+  const textarea = $('custom');
+  const data = textarea.value.trim();
+  const ok = /^([0-9a-fA-F]{2}\s*)+$/.test(data);
+  textarea.classList.remove('ok', 'bad');
+
+  if (!data) {
+    $('bytes').textContent = '0';
+    $('valid').textContent = '未输入';
+    $('hexState').textContent = 'HEX';
+    return false;
+  }
+
+  const count = (data.match(/[0-9a-fA-F]{2}/g) || []).length;
+  $('bytes').textContent = count;
+  $('valid').textContent = ok ? '格式正确' : '格式错误';
+  $('hexState').textContent = ok ? '可发送' : '需检查';
+  textarea.classList.add(ok ? 'ok' : 'bad');
+  return ok;
+}
+
+async function sendCustom(event) {
+  const data = $('custom').value.trim();
+  if (!data) {
+    show('先写点 HEX 指令', true);
+    return;
+  }
+  if (!checkHex()) {
+    show('格式不对：请输入十六进制字节', true);
+    return;
+  }
+
+  runBar();
+  $('last').textContent = '隐藏抽屉发送中…';
+
+  try {
+    const response = await fetch('/custom', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'd=' + encodeURIComponent(data),
+    });
+    if (!response.ok) throw new Error('bad status');
+
+    show('隐藏抽屉已出票');
+    $('last').textContent = '刚刚：隐藏抽屉';
+    confetti(event);
+  } catch (error) {
+    show('发送失败，检查一下热点连接', true);
+    $('last').textContent = '发送失败';
+  }
+}
 )WEB_ASSET";
 
 struct WebAsset {

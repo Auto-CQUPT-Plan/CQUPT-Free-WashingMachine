@@ -1,5 +1,112 @@
-let timer;const $=id=>document.getElementById(id);function show(msg,err){const e=$('toast');clearTimeout(timer);e.textContent=msg;e.className='toast show '+(err?'err':'ok');timer=setTimeout(()=>e.className='toast',2200)}
-function runBar(){const a=$('activity');a.className='rail';void a.offsetWidth;a.className='rail run'}function confetti(ev){const box=$('bits'),x=ev?ev.clientX:innerWidth/2,y=ev?ev.clientY:innerHeight*.72;for(let i=0;i<10;i++){const b=document.createElement('i');b.style.left=x+'px';b.style.top=y+'px';b.style.background=i%3?'#ffd66b':i%2?'#8fd3c7':'#f8b8c6';b.style.setProperty('--dx',(Math.random()*130-65)+'px');box.appendChild(b);setTimeout(()=>b.remove(),850)}}
-async function send(t,n,el,ev){runBar();if(el)el.classList.add('busy');$('last').textContent='指令发送中…';try{const r=await fetch('/'+t,{method:'POST'});if(!r.ok)throw 0;show('指令已发送：'+n);$('last').textContent='刚刚：'+n;if(el){el.classList.remove('busy');el.classList.add('ok');setTimeout(()=>el.classList.remove('ok'),700)}confetti(ev)}catch(e){if(el)el.classList.remove('busy');show('发送失败，看看热点连上没',1);$('last').textContent='发送失败'}}
-function checkHex(){const ta=$('custom'),d=ta.value.trim(),ok=/^([0-9a-fA-F]{2}\s*)+$/.test(d);ta.classList.remove('ok','bad');if(!d){$('bytes').textContent='0';$('valid').textContent='未输入';$('hexState').textContent='HEX';return false}const n=(d.match(/[0-9a-fA-F]{2}/g)||[]).length;$('bytes').textContent=n;$('valid').textContent=ok?'格式正确':'格式错误';$('hexState').textContent=ok?'可发送':'需检查';ta.classList.add(ok?'ok':'bad');return ok}
-async function sendCustom(ev){const d=$('custom').value.trim();if(!d){show('先写点 HEX 指令',1);return}if(!checkHex()){show('格式不对：请输入十六进制字节',1);return}runBar();$('last').textContent='自定义指令发送中…';try{const r=await fetch('/custom',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'d='+encodeURIComponent(d)});if(!r.ok)throw 0;show('自定义指令已发送');$('last').textContent='刚刚：自定义 HEX';confetti(ev)}catch(e){show('发送失败，看看热点连上没',1);$('last').textContent='发送失败'}}
+let timer;
+const $ = (id) => document.getElementById(id);
+
+function show(message, isError) {
+  const toast = $('toast');
+  clearTimeout(timer);
+  toast.textContent = message;
+  toast.className = 'toast show ' + (isError ? 'err' : 'ok');
+  timer = setTimeout(() => {
+    toast.className = 'toast';
+  }, 2200);
+}
+
+function runBar() {
+  const activity = $('activity');
+  activity.className = 'ticket-rail';
+  void activity.offsetWidth;
+  activity.className = 'ticket-rail run';
+}
+
+function confetti(event) {
+  const box = $('bits');
+  const x = event ? event.clientX : innerWidth / 2;
+  const y = event ? event.clientY : innerHeight * 0.72;
+  const colors = ['#ffdbe5', '#ffe8a9', '#94d4c4', '#ffffff'];
+
+  for (let i = 0; i < 12; i++) {
+    const piece = document.createElement('i');
+    piece.style.left = x + 'px';
+    piece.style.top = y + 'px';
+    piece.style.background = colors[i % colors.length];
+    piece.style.setProperty('--dx', (Math.random() * 140 - 70) + 'px');
+    box.appendChild(piece);
+    setTimeout(() => piece.remove(), 850);
+  }
+}
+
+async function send(path, name, button, event) {
+  runBar();
+  if (button) button.classList.add('busy');
+  $('last').textContent = '洗衣券出票中…';
+
+  try {
+    const response = await fetch('/' + path, { method: 'POST' });
+    if (!response.ok) throw new Error('bad status');
+
+    show('已出票：' + name);
+    $('last').textContent = '刚刚：' + name;
+    if (button) {
+      button.classList.remove('busy');
+      button.classList.add('ok');
+      setTimeout(() => button.classList.remove('ok'), 700);
+    }
+    confetti(event);
+  } catch (error) {
+    if (button) button.classList.remove('busy');
+    show('出票失败，检查一下热点连接', true);
+    $('last').textContent = '出票失败';
+  }
+}
+
+function checkHex() {
+  const textarea = $('custom');
+  const data = textarea.value.trim();
+  const ok = /^([0-9a-fA-F]{2}\s*)+$/.test(data);
+  textarea.classList.remove('ok', 'bad');
+
+  if (!data) {
+    $('bytes').textContent = '0';
+    $('valid').textContent = '未输入';
+    $('hexState').textContent = 'HEX';
+    return false;
+  }
+
+  const count = (data.match(/[0-9a-fA-F]{2}/g) || []).length;
+  $('bytes').textContent = count;
+  $('valid').textContent = ok ? '格式正确' : '格式错误';
+  $('hexState').textContent = ok ? '可发送' : '需检查';
+  textarea.classList.add(ok ? 'ok' : 'bad');
+  return ok;
+}
+
+async function sendCustom(event) {
+  const data = $('custom').value.trim();
+  if (!data) {
+    show('先写点 HEX 指令', true);
+    return;
+  }
+  if (!checkHex()) {
+    show('格式不对：请输入十六进制字节', true);
+    return;
+  }
+
+  runBar();
+  $('last').textContent = '隐藏抽屉发送中…';
+
+  try {
+    const response = await fetch('/custom', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'd=' + encodeURIComponent(data),
+    });
+    if (!response.ok) throw new Error('bad status');
+
+    show('隐藏抽屉已出票');
+    $('last').textContent = '刚刚：隐藏抽屉';
+    confetti(event);
+  } catch (error) {
+    show('发送失败，检查一下热点连接', true);
+    $('last').textContent = '发送失败';
+  }
+}

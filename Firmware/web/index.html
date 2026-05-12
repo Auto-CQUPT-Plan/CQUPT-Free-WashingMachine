@@ -3,23 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>校园洗衣券铺</title>
+<title>樱花洗衣券铺</title>
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div class="orn"><i>泡</i><i>券</i><i>◯</i><i>洗</i></div>
+<div class="grain"></div>
+<div class="sakura" aria-hidden="true"><i>✿</i><i>券</i><i>泡</i><i>◌</i><i>洗</i></div>
 <main class="wrap">
-<header class="top"><div class="brand"><div class="mark">🫧</div><div><h1>校园洗衣券铺</h1><p>CQUPT LAUNDRY TICKET</p></div></div><div class="status"><i></i>当前在线</div></header>
-<section class="hero"><div class="tape">复古小店 · 校园洗衣遥控</div><h2>今天也要把衣服<b>洗得干净</b></h2><p>连接设备热点，选择对应洗衣券，ESP8266 会把 HEX 指令发送到串口。界面保留复古小店的氛围，操作保持直接清晰。</p><div class="stamp">洗衣券<br>已就绪</div><div class="washer"></div><div class="info"><div class="mini"><b>设备热点</b><span>好孩子不玩米</span></div><div class="mini"><b>连接密码</b><span>12345678</span></div></div></section>
-<section class="panel"><div class="title"><h3>洗衣模式</h3><small id="last">待选择</small></div><div class="rail" id="activity"><i></i></div><div class="grid">
-<button class="cmd" data-price="¥1" onclick="send('1','1元脱水',this,event)"><em>ticket 01</em><strong>1元脱水</strong><span>短时脱水，适合单独甩干衣物</span></button>
-<button class="cmd" data-price="¥3" onclick="send('3','3元快速洗',this,event)"><em>ticket 03</em><strong>3元快速洗</strong><span>快速清洗，适合少量衣物</span></button>
-<button class="cmd pick" data-price="¥4" onclick="send('4','4元标准洗',this,event)"><em>店长推荐</em><strong>4元标准洗</strong><span>日常推荐，适合标准洗涤</span></button>
-<button class="cmd" data-price="4+" onclick="send('4p','4元加强版',this,event)"><em>extra</em><strong>4元加强版</strong><span>加强洗涤，适合更完整的流程</span></button>
-<button class="cmd wide" data-price="¥6" onclick="send('6','6元加强洗',this,event)"><em>大件洗衣券</em><strong>6元加强洗</strong><span>连续发送两段指令，适合大件或较多衣物</span></button>
-</div></section>
-<section class="panel"><div class="title"><h3>自定义指令</h3><small id="hexState">HEX</small></div><div class="custom"><div class="note"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>自定义 HEX 指令</span></div><textarea id="custom" spellcheck="false" placeholder="AA 06 01 98 04 00 75 03" oninput="checkHex()"></textarea></div><div class="meta"><span>字节数：<b id="bytes">0</b></span><span id="valid">未输入</span></div><button class="send" onclick="sendCustom(event)">发送自定义指令</button><p class="hint">仅输入十六进制字节，可带空格。请只在授权设备上学习测试。</p></div></section>
-</main><div id="bits" class="confetti"></div><div id="toast" class="toast"></div>
+<header class="shop-head">
+  <div class="lantern"><span>洗</span></div>
+  <div class="brand">
+    <p class="eyebrow">昭和小店 · 校园洗衣遥控</p>
+    <h1>樱花洗衣券铺</h1>
+    <p class="sub">把洗衣模式做成一张张小票，轻轻一点就出票。</p>
+  </div>
+  <div class="open"><i></i>今日营业中</div>
+</header>
+
+<section class="hero ticket">
+  <div class="tape">CQUPT LAUNDRY TICKET</div>
+  <div class="hero-copy">
+    <span class="seal">入店<br>欢迎</span>
+    <h2>今天也要把衣服<br><b>洗得松松软软</b></h2>
+    <p>连接设备热点后，选择一张洗衣券。ESP8266 会把对应 HEX 指令发送到串口，界面保持日系小店感，操作仍然直接。</p>
+  </div>
+  <div class="washer" aria-hidden="true"><b></b></div>
+  <div class="shop-meta">
+    <div><span>小店热点</span><strong>好孩子不玩米</strong></div>
+    <div><span>入店暗号</span><strong>12345678</strong></div>
+  </div>
+</section>
+
+<section class="shelf panel">
+  <div class="section-title">
+    <div><span>01</span><h3>洗衣券货架</h3></div>
+    <small id="last">欢迎光临</small>
+  </div>
+  <div class="ticket-rail" id="activity"><i></i></div>
+  <div class="ticket-grid">
+    <button class="cmd blush" data-price="¥1" onclick="send('1','1元脱水',this,event)"><em>轻量小票</em><strong>1元脱水</strong><span>单独甩干，像小店快速取票。</span></button>
+    <button class="cmd mint" data-price="¥3" onclick="send('3','3元快速洗',this,event)"><em>快速券</em><strong>3元快速洗</strong><span>少量衣物，短平快完成。</span></button>
+    <button class="cmd pick" data-price="¥4" onclick="send('4','4元标准洗',this,event)"><em>店长推荐</em><strong>4元标准洗</strong><span>日常最稳妥的一张洗衣券。</span></button>
+    <button class="cmd sky" data-price="4+" onclick="send('4p','4元加强版',this,event)"><em>加量券</em><strong>4元加强版</strong><span>流程更完整，适合稍多衣物。</span></button>
+    <button class="cmd wide cream" data-price="¥6" onclick="send('6','6元加强洗',this,event)"><em>大件洗衣券</em><strong>6元加强洗</strong><span>连续发送两段指令，适合大件或更重的洗涤需求。</span></button>
+  </div>
+</section>
+
+<section class="drawer panel">
+  <div class="section-title">
+    <div><span>02</span><h3>隐藏抽屉</h3></div>
+    <small id="hexState">HEX</small>
+  </div>
+  <div class="terminal-card">
+    <div class="bar"><i></i><i></i><i></i><b>自定义 HEX 小票</b></div>
+    <textarea id="custom" spellcheck="false" placeholder="AA 06 01 98 04 00 75 03" oninput="checkHex()"></textarea>
+  </div>
+  <div class="meta"><span>字节数：<b id="bytes">0</b></span><span id="valid">未输入</span></div>
+  <button class="send" onclick="sendCustom(event)">从隐藏抽屉出票</button>
+  <p class="hint">仅输入十六进制字节，可带空格。请只在授权设备上学习测试。</p>
+</section>
+</main>
+<div id="bits" class="confetti"></div>
+<div id="toast" class="toast"></div>
 <script src="/app.js"></script>
 </body>
 </html>

@@ -31,7 +31,7 @@ const char WEB_ASSET_INDEX_CONTENT[] PROGMEM = R"WEB_ASSET(<!DOCTYPE html>
   <div class="tape">CQUPT LAUNDRY TICKET</div>
   <div class="hero-copy">
     <span class="seal">入店<br>欢迎</span>
-    <h2>今天也要把衣服<br><b>洗得松松软软</b></h2>
+    <h2>今天也要把衣服<br><b>洗得清清爽爽</b></h2>
     <p>连接设备热点后，选择一张洗衣券。ESP8266 会把对应 HEX 指令发送到串口，界面保持日系小店感，操作仍然直接。</p>
   </div>
   <div class="washer" aria-hidden="true"><b></b></div>

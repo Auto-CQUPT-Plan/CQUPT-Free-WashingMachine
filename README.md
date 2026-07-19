@@ -11,7 +11,7 @@
 
 **适配平台：ESP8266 系列 MCU**
 
-**相关博客：[补络阁](https://blog.tuf3i.click/posts/acp-washing-machine/)**
+**相关博客：[补络阁](https://blog.tuf3i.cc/posts/acp-washing-machine/)**
 
 ### 1. 默认配置：
 

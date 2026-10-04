@@ -1,11 +1,11 @@
-# Firmware 前后端分离说明
+# Firmware v1 前后端分离说明
 
-这个目录仍然是 ESP8266 / PlatformIO 固件项目，但页面代码已经从 `src/main.cpp` 中拆出，方便单独维护。
+这个目录（`Firmware/v1`）仍然是 ESP8266 / PlatformIO 固件项目，但页面代码已经从 `src/main.cpp` 中拆出，方便单独维护。新版本开发见 `Firmware/v2`。
 
 ## 目录结构
 
 ```text
-Firmware/
+Firmware/v1/
 ├─ src/
 │  ├─ main.cpp                    # 后端：WiFi AP、HTTP 路由、串口指令
 │  └─ generated/web_assets.h      # 自动生成：把前端文件嵌入固件

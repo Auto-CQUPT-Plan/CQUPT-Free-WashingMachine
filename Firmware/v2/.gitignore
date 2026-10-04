@@ -1,0 +1,8 @@
+.pio
+
+# 资源生成脚本的本地预览图
+scripts/app_icons_preview.png
+
+# PlatformIO 打开工程时自动生成（含机器路径），不跟踪
+.vscode/c_cpp_properties.json
+.vscode/launch.json

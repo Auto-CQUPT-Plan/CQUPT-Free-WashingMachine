@@ -1,0 +1,22 @@
+{
+  "source": "https://ledfont.botelvdong.com/agent-api.md",
+  "generated_at": "2026-10-03",
+  "fonts": [
+    {
+      "array_name": "kk_font_app_title",
+      "font": "wenquanyi_9pt",
+      "size": 12,
+      "characters": " %-./0123456789:?CEPQSTU_acdefghiklnoprstuvwy下串于亮令件作信元关准券加动发取口台启回固大定屏已幕平度开式强快息择指按提操旋本标模樱水波洗消版特率确示脱花衣认转返送适选配铺",
+      "glyph_count": 108,
+      "byte_count": 2271
+    },
+    {
+      "array_name": "kk_font_app_body",
+      "font": "wenquanyi_13px",
+      "size": 14,
+      "characters": " %-./0123456789:?CEPQSTU_acdefghiklnoprstuvwy下串于亮令件作信元关准券加动发取口台启回固大定屏已幕平度开式强快息择指按提操旋本标模樱水波洗消版特率确示脱花衣认转返送适选配铺",
+      "glyph_count": 108,
+      "byte_count": 2593
+    }
+  ]
+}

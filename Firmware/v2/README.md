@@ -102,8 +102,18 @@ Firmware/v2/
 
 ```powershell
 cd Firmware/v2
-pio run -e nodemcuv2                        # 编译
-pio run -e nodemcuv2 --upload-port COM4     # 烧录
+pio run -e nodemcuv2                          # 编译
+pio run -e nodemcuv2 -t upload --upload-port COM4   # 烧录（必须带 -t upload）
+pio device monitor -e nodemcuv2               # 串口监视（2400，看洗衣机指令）
+```
+
+> 烧录失败或运行异常时，先断开洗衣机控制板的 TX/RX 连线（UART0 与下载共用），并确认输出里有 esptool 的 `Hash of data verified`。
+
+排查 OLED 不显示时，可以烧录诊断固件（扫描 I2C、直测屏幕，串口 115200）：
+
+```powershell
+pio run -e diag -t upload --upload-port COM4
+pio device monitor -e diag
 ```
 
 当前资源占用：RAM 46%（双缓冲显存 + UI 状态），Flash 28%。
